@@ -311,6 +311,17 @@
         footer a { color: var(--text-muted); }
         footer a:hover { color: var(--accent-start); }
 
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
         @media (max-width: 600px) {
             .hero { padding: 48px 0 40px; }
             .hero h1 { font-size: 2.2rem; }
@@ -326,7 +337,7 @@
     <div class="hero">
         <div class="container">
             <img src="logo.png" alt="Musjxa logo">
-            <h1>Musjxa</h1>
+            <h1 class="sr-only">Musjxa — Apple Music Now Playing Broadcaster</h1>
             <p class="tagline">
                 Broadcast your Apple Music "now playing" to any channel.
                 Pluggable, configurable, zero dependencies. Pure macOS.
