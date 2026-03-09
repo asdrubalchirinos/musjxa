@@ -1,0 +1,29 @@
+{
+  "pollInterval": 5,
+  "channels": [
+    {
+      "type": "logger",
+      "enabled": true,
+      "template": "🎧 Now playing\n\n{{track}} — {{artist}}"
+    },
+    {
+      "type": "twitter",
+      "enabled": false,
+      "template": "🎧 Now playing\n\n{{track}} — {{artist}}",
+      "bearerToken": "YOUR_BEARER_TOKEN"
+    },
+    {
+      "type": "telegram",
+      "enabled": false,
+      "template": "🎧 Now playing\n\n{{track}} — {{artist}}",
+      "botToken": "YOUR_BOT_TOKEN",
+      "chatId": "YOUR_CHAT_ID"
+    },
+    {
+      "type": "pumble",
+      "enabled": false,
+      "template": "🎧 Now playing\n\n{{track}} — {{artist}}",
+      "webhookUrl": "YOUR_WEBHOOK_URL"
+    }
+  ]
+}
