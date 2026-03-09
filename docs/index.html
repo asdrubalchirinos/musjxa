@@ -135,6 +135,9 @@
             border-radius: 12px;
             padding: 28px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .step .number {
@@ -159,17 +162,49 @@
         .step p {
             color: var(--text-muted);
             font-size: 0.95rem;
+            flex: 1;
+        }
+
+        .step .code-block {
+            position: relative;
+            margin-top: 12px;
+            width: 100%;
         }
 
         .step code {
             display: block;
-            margin-top: 12px;
             background: var(--bg);
-            padding: 8px 12px;
+            padding: 10px 40px 10px 12px;
             border-radius: 6px;
             font-family: "SF Mono", "Fira Code", monospace;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--accent-start);
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px 6px;
+            font-size: 0.75rem;
+            line-height: 1;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .copy-btn:hover {
+            color: var(--text);
+            border-color: var(--text-muted);
+        }
+
+        .copy-btn.copied {
+            color: #4ade80;
+            border-color: #4ade80;
         }
 
         /* Features */
@@ -313,19 +348,28 @@
                     <div class="number">1</div>
                     <h3>Clone</h3>
                     <p>Grab the repo from GitHub</p>
-                    <code>git clone github.com/asdrubalchirinos/musjxa</code>
+                    <div class="code-block">
+                        <code>git clone asdrubalchirinos/musjxa</code>
+                        <button class="copy-btn" onclick="copyCmd(this)">&#x2398;</button>
+                    </div>
                 </div>
                 <div class="step">
                     <div class="number">2</div>
                     <h3>Configure</h3>
                     <p>Copy the example config and add your credentials</p>
-                    <code>cp config.example.json config.json</code>
+                    <div class="code-block">
+                        <code>cp config.example.json config.json</code>
+                        <button class="copy-btn" onclick="copyCmd(this)">&#x2398;</button>
+                    </div>
                 </div>
                 <div class="step">
                     <div class="number">3</div>
                     <h3>Run</h3>
                     <p>Start broadcasting what you listen to</p>
-                    <code>osascript -l JavaScript musjxa.js</code>
+                    <div class="code-block">
+                        <code>osascript -l JavaScript musjxa.js</code>
+                        <button class="copy-btn" onclick="copyCmd(this)">&#x2398;</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -416,5 +460,18 @@
         </div>
     </footer>
 
+    <script>
+    function copyCmd(btn) {
+        const text = btn.previousElementSibling.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            btn.textContent = '✓';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.innerHTML = '&#x2398;';
+                btn.classList.remove('copied');
+            }, 1500);
+        });
+    }
+    </script>
 </body>
 </html>
