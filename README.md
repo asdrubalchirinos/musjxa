@@ -1,6 +1,13 @@
-# Musjxa
+<p align="center">
+  <img src="logo.png" alt="Musjxa" width="200">
+</p>
 
-Broadcast your Apple Music "now playing" to any channel — Twitter/X, Telegram, Pumble, or your own custom plugin. Built entirely with JXA (JavaScript for Automation), zero dependencies, native macOS.
+<h1 align="center">Musjxa</h1>
+
+<p align="center">
+  Broadcast your Apple Music "now playing" to any channel — Twitter/X, Telegram, Pumble, or your own custom plugin.<br>
+  Built entirely with JXA (JavaScript for Automation), zero dependencies, native macOS.
+</p>
 
 ## How it works
 
