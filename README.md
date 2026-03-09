@@ -27,7 +27,7 @@ channels/
 ## Quick start
 
 ```bash
-git clone https://github.com/achirinos/musjxa.git
+git clone https://github.com/asdrubalchirinos/musjxa.git
 cd musjxa
 cp config.example.json config.json   # edit with your credentials
 osascript -l JavaScript musjxa.js
