@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musjxa — Apple Music Now Playing Broadcaster</title>
+    <meta name="description" content="Broadcast your Apple Music now playing to Twitter/X, Telegram, Pumble, or any channel. Pluggable JXA script, zero dependencies, native macOS.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0f0f13;
+            --surface: #1a1a22;
+            --border: #2a2a35;
+            --text: #e4e4e8;
+            --text-muted: #8888a0;
+            --accent-start: #ff6b6b;
+            --accent-end: #ee4444;
+            --gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: var(--accent-start); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 80px 0 60px;
+        }
+
+        .hero img {
+            width: 140px;
+            height: auto;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .hero .tagline {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 560px;
+            margin: 0 auto 36px;
+        }
+
+        .hero .buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(238, 68, 68, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 28px rgba(238, 68, 68, 0.45);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-start);
+        }
+
+        /* Sections */
+        section {
+            padding: 60px 0;
+        }
+
+        section h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        section .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-size: 1.05rem;
+        }
+
+        /* Steps */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .step {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            text-align: center;
+        }
+
+        .step .number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .step h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .step code {
+            display: block;
+            margin-top: 12px;
+            background: var(--bg);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: "SF Mono", "Fira Code", monospace;
+            font-size: 0.85rem;
+            color: var(--accent-start);
+        }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+        }
+
+        .feature {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .feature .icon {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+        }
+
+        .feature h3 {
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+
+        .feature p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Channels */
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .channel-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .channel-card .icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .channel-card h3 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .channel-card p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Plugin */
+        .plugin-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 36px;
+        }
+
+        .plugin-section h2 {
+            margin-bottom: 8px;
+        }
+
+        .plugin-section .subtitle {
+            margin-bottom: 24px;
+        }
+
+        pre {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: "SF Mono", "Fira Code", monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        pre .comment { color: var(--text-muted); }
+        pre .keyword { color: #c792ea; }
+        pre .function { color: #82aaff; }
+        pre .string { color: #c3e88d; }
+        pre .const { color: #f78c6c; }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer a { color: var(--text-muted); }
+        footer a:hover { color: var(--accent-start); }
+
+        @media (max-width: 600px) {
+            .hero { padding: 48px 0 40px; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero .tagline { font-size: 1rem; }
+            section { padding: 40px 0; }
+            section h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <div class="hero">
+        <div class="container">
+            <img src="logo.png" alt="Musjxa logo">
+            <h1>Musjxa</h1>
+            <p class="tagline">
+                Broadcast your Apple Music "now playing" to any channel.
+                Pluggable, configurable, zero dependencies. Pure macOS.
+            </p>
+            <div class="buttons">
+                <a href="https://github.com/asdrubalchirinos/musjxa" class="btn btn-primary">View on GitHub</a>
+                <a href="#get-started" class="btn btn-secondary">Get Started</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Get Started -->
+    <section id="get-started">
+        <div class="container">
+            <h2>Get started in 3 steps</h2>
+            <p class="subtitle">No installs. No build tools. Just clone and run.</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="number">1</div>
+                    <h3>Clone</h3>
+                    <p>Grab the repo from GitHub</p>
+                    <code>git clone github.com/asdrubalchirinos/musjxa</code>
+                </div>
+                <div class="step">
+                    <div class="number">2</div>
+                    <h3>Configure</h3>
+                    <p>Copy the example config and add your credentials</p>
+                    <code>cp config.example.json config.json</code>
+                </div>
+                <div class="step">
+                    <div class="number">3</div>
+                    <h3>Run</h3>
+                    <p>Start broadcasting what you listen to</p>
+                    <code>osascript -l JavaScript musjxa.js</code>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section>
+        <div class="container">
+            <h2>Why Musjxa?</h2>
+            <p class="subtitle">Lightweight by design, extensible by nature.</p>
+            <div class="features">
+                <div class="feature">
+                    <div class="icon">🔌</div>
+                    <h3>Pluggable channels</h3>
+                    <p>Drop a .js file in channels/ to add any service. No core changes needed.</p>
+                </div>
+                <div class="feature">
+                    <div class="icon">📝</div>
+                    <h3>Custom templates</h3>
+                    <p>Each channel gets its own message format with {{track}} and {{artist}} placeholders.</p>
+                </div>
+                <div class="feature">
+                    <div class="icon">🪶</div>
+                    <h3>Zero dependencies</h3>
+                    <p>Pure JXA. No Node.js, no npm, no build step. Just macOS.</p>
+                </div>
+                <div class="feature">
+                    <div class="icon">🍎</div>
+                    <h3>Native macOS</h3>
+                    <p>Built with JavaScript for Automation. Talks directly to Apple Music.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Channels -->
+    <section>
+        <div class="container">
+            <h2>Built-in channels</h2>
+            <p class="subtitle">Ready to use out of the box. Or write your own.</p>
+            <div class="channels-grid">
+                <div class="channel-card">
+                    <div class="icon">🖥️</div>
+                    <h3>System Log</h3>
+                    <p>macOS unified log</p>
+                </div>
+                <div class="channel-card">
+                    <div class="icon">𝕏</div>
+                    <h3>Twitter / X</h3>
+                    <p>Post tweets via API</p>
+                </div>
+                <div class="channel-card">
+                    <div class="icon">✈️</div>
+                    <h3>Telegram</h3>
+                    <p>Send via Bot API</p>
+                </div>
+                <div class="channel-card">
+                    <div class="icon">💬</div>
+                    <h3>Pumble</h3>
+                    <p>Webhook integration</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plugin -->
+    <section>
+        <div class="container">
+            <div class="plugin-section">
+                <h2>Write a plugin in 5 lines</h2>
+                <p class="subtitle">Create a file in channels/ with a post() function. That's the entire API.</p>
+                <pre><span class="comment">// channels/discord.js</span>
+<span class="keyword">function</span> <span class="function">post</span>(message, channel) {
+    <span class="keyword">const</span> body = JSON.<span class="function">stringify</span>({ content: message })
+    <span class="function">curlPost</span>(channel.webhookUrl, [<span class="string">"Content-Type: application/json"</span>], body)
+}</pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>
+                Musjxa is <a href="https://github.com/asdrubalchirinos/musjxa/blob/main/LICENSE">MIT licensed</a> and open source.
+                Built with JXA on macOS.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
